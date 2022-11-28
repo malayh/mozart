@@ -6,7 +6,6 @@ from enum import Enum
 
 MAJOR_SCALE_INTERVALS = [2,2,1,2,2,2,1]
 
-
 class Mode(Enum):
     ionian = 0
     dorian = 1
@@ -61,12 +60,26 @@ class MidiNote:
         next_note_octave = self.octave + ((self.note.value+interval )//12)
 
         return MidiNote(next_note,next_note_octave)
+ 
+    def sharpen(self, semitone: int = 1):
+        # TODO: Add boundry checks
+        self.octave += (self.note.value+semitone)//12
+        self.note = Note((self.note.value+semitone)%12)
+        return self
+
+    def flatten(self, semitone: int = 1):
+        # TODO: Add boundry checks
+        self.octave = self.octave + (self.note.value-semitone) // 12
+        self.note = Note((self.note.value-semitone)%12)
+        return self
+
 
     def duplicate(self) -> MidiNote:
         return MidiNote(self.note,self.octave)
 
 @dataclass
 class Scale:
+    # Assume scale has 8 notes.
     notes : list[MidiNote]
     mode: Mode
 
@@ -81,21 +94,40 @@ class Scale:
 
         return note
 
+    def get_note_by_degree(self, degree: int ) -> MidiNote:
+        # Assume scale has 8 notes.
+        # Degree starts from 1
+
+        position = degree - 1
+        note = self.notes[position%7]
+
+        if position // 7 > 0:
+            note = note.duplicate()
+            note.octave += position // 7
+
+        return note
 
     def get_diatonic_chord(self,degree: int):
+        # degree starts at 1
         notes = [
-            self.get_note_by_distance(degree,0),
-            self.get_note_by_distance(degree,2),
-            self.get_note_by_distance(degree,4),
-            self.get_note_by_distance(degree,6),
+            self.get_note_by_distance(degree-1,0),
+            self.get_note_by_distance(degree-1,2),
+            self.get_note_by_distance(degree-1,4),
         ]
-        return Chord(degree,notes,self)
+        return Chord(notes,self)
 
 @dataclass
 class Chord:
-    degree : int
     notes : list[MidiNote]
     scale : Scale
+
+    def extend(self,notes:list[MidiNote]):
+        self.notes.extend(notes)
+
+
+class ChordProgression:
+    pass
+
 
 
 if __name__ == "__main__":

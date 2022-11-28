@@ -75,21 +75,29 @@ def play_chord(chord: Chord):
 
 def test_scale():
     
-    note = Note.A.get_midi(3)
-
-    for mode in Mode:
-        scale = Scale.get_mode_scale(note, mode)
-        play_notes(scale)
-        
-def test_chords():
-    root = Note.C.get_midi(4)
+    root = Note.A.get_midi(3)
 
     for mode in Mode:
         scale = mode.get_scale(root)
-        for i in range(7):
-            play_chord(scale.get_diatonic_chord(i))
+        play_notes(scale.notes)
+        
+def test_chords():
+    root = Note.E.get_midi(4)
+    scale = Mode.ionian.get_scale(root)
+    chord  = scale.get_diatonic_chord(1)
+    play_chord(chord)
+    chord.extend([scale.get_note_by_degree(8)])
+    play_chord(chord)
+
+    # for i in [1,6,5,1]:
+    #     chrod = scale.get_diatonic_chord(i-1)
+    #     play_chord(chrod)
 
 
+def test_notes():
+    note = Note.B.get_midi(5)
+    for i in range(24):
+        play_notes([note.flatten()])
 
 
     
@@ -98,3 +106,4 @@ def test_chords():
 # test_midi_file_out()
 # test_scale()
 test_chords()
+# test_notes()
