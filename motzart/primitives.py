@@ -114,20 +114,16 @@ class Scale:
             self.get_note_by_distance(degree-1,2),
             self.get_note_by_distance(degree-1,4),
         ]
-        return Chord(notes,self)
+        return Chord(notes,self,degree-1)
 
 @dataclass
 class Chord:
     notes : list[MidiNote]
     scale : Scale
+    position : int 
 
     def extend(self,notes:list[MidiNote]):
         self.notes.extend(notes)
-
-
-class ChordProgression:
-    pass
-
 
 
 if __name__ == "__main__":

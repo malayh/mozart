@@ -1,6 +1,8 @@
+import script_include
+
 import time
 import mido
-from theory import Note, MidiNote, Scale, Mode, Chord
+from motzart.primitives import Note, MidiNote, Mode, Chord
 
 """
 - 12 tone equal temperament. Note 0 = C0, Note 12 = C1, Note 24 = C2
@@ -63,7 +65,7 @@ def play_chord(chord: Chord):
     outport = mido.open_output('pyMidiPort 1')
     for note in chord.notes:
        outport.send(mido.Message('note_on', note=note.midi, velocity=100,channel=3))
-       time.sleep(0.1)
+       time.sleep(0.0)
     
     time.sleep(2)
 
