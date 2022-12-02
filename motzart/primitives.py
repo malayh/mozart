@@ -78,6 +78,12 @@ class MidiNote:
     def duplicate(self) -> MidiNote:
         return MidiNote(self.note, self.octave)
 
+    def distance(self, note: MidiNote) -> int:
+        """
+        Returns distance in semitones
+        """
+        return abs(self.midi - note.midi)
+
 
 @dataclass
 class Scale:
@@ -91,6 +97,8 @@ class Scale:
 
     def get_note_by_distance(self, start: int, distance: int) -> MidiNote:
         """
+        Retuns nth note from `start` index of self.notes where n=`distance`
+
         `start` is index of the starting note in self.notes
         """
         position = start + distance
@@ -165,5 +173,3 @@ class Chord:
             self.extend(degree, argumentation=arg)
 
         return self
-
-
