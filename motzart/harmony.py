@@ -140,7 +140,7 @@ class ChordProgressionGenerator:
     def spice_up(self, progession: ChordProgression) -> ChordProgression:
         spice = ["6", "9", "11"]
 
-        add_7th = random.random() < 0.5
+        add_7th = random.random() < 0.6
         if add_7th:
             for chord in progession.chords:
                 if random.random() < 0.9:
@@ -156,6 +156,15 @@ class ChordProgressionGenerator:
         return progession
 
     def generate(self) -> ChordProgression:
+        """
+        - v1 feats
+            - always resolves to tonic
+            - always starts with tonic
+            - randomize adding 7ths
+            - randomize adding other extensions
+            - randomize replacing diminished
+        """
+
         pre_final, final = self.chooce_final_chords()
 
         chords = [None] * (self.lenght - 2)
