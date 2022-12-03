@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from enum import Enum
 import random
 
-from motzart.primitives import MidiNote, Chord, Scale, Note, Mode
+from motzart.primitives import ChordType, Chord, Scale, Note, Mode
 
 
 class ChordCategory(Enum):
@@ -17,18 +17,6 @@ class ChordCategory(Enum):
         for category in ChordCategory:
             if degree % 8 in category.value:
                 return category
-
-
-# Which class chords tend to resolve which class
-resolution_map = {
-    ChordCategory.TONIC: [
-        ChordCategory.TONIC,
-        ChordCategory.SUB_DOMINENT,
-        ChordCategory.DOMINENT,
-    ],
-    ChordCategory.SUB_DOMINENT: [ChordCategory.SUB_DOMINENT, ChordCategory.DOMINENT],
-    ChordCategory.DOMINENT: [ChordCategory.TONIC],
-}
 
 
 @dataclass
@@ -152,26 +140,26 @@ class ChordProgressionGenerator:
     def spice_up(self, progession: ChordProgression) -> ChordProgression:
         spice = ["6", "9", "11"]
 
-        add_7th = random.random() < 1
+        add_7th = random.random() < 0.5
         if add_7th:
             for chord in progession.chords:
                 if random.random() < 0.9:
                     chord.extend(7)
 
-        # add_more_spice = random.random() < 0.2
-        # if add_more_spice:
-        #     for chord in progession.chords:
-        #         if random.random() < 0.7:
-        #             chord.extend_many(
-        #                 random.choices(spice, weights=[0.3, 0.9, 0.2], k=1)
-        #             )
+        #  20% chance of adding abit more spice to the chord
+        add_more_spice = random.random() < 0.2
+        if add_more_spice:
+            for chord in progession.chords:
+                if random.random() < 0.9:
+                    chord.extend_many(random.choices(spice, k=1))
 
         return progession
 
     def generate(self) -> ChordProgression:
         pre_final, final = self.chooce_final_chords()
 
-        chords = [None] * (self.lenght - 2) + [pre_final, final]
+        chords = [None] * (self.lenght - 2)
+        chords.extend([pre_final, final])
 
         chords[0] = self.scale.get_diatonic_triad(1)
 
@@ -180,8 +168,17 @@ class ChordProgressionGenerator:
                 random.choice([1, 2, 3, 4, 5, 6, 7])
             )
 
+            # If currently selected chord is dimiished, then there is 50% chance that it would be tried to be replaced 3 times
+            if chords[i].chord_type == ChordType.diminished and random.random() < 0.5:
+                for _ in range(2):
+                    chords[i] = self.scale.get_diatonic_triad(
+                        random.choice([1, 2, 3, 4, 5, 6, 7])
+                    )
+                    if chords[i].chord_type != ChordType.diminished:
+                        break
+
+            # Try 3 times to get a different chord than the previous one
             if i > 0 and chords[i] == chords[i - 1]:
-                # Try 3 times to get a different chord than the previous one
                 for _ in range(3):
                     chords[i] = self.scale.get_diatonic_triad(
                         random.choice([1, 2, 3, 4, 5, 6, 7])
@@ -190,6 +187,4 @@ class ChordProgressionGenerator:
                         break
 
         progession = ChordProgression(self.key, self.mode, chords)
-        # progession = ChordProgression(self.key,self.mode,[pre_final,final])
-
         return self.spice_up(progession)
