@@ -1,12 +1,18 @@
 import script_include
 
 from motzart.primitives import Scale, Mode, Chord, Note
-from dev_utils import play_chord
+from dev_utils import play_chord, play_notes
+
+
+def try_mode():
+    root = Note.D.get_midi(4)
+    scale = Mode.lydian.get_scale(root)
+    play_notes(scale.notes)
 
 
 def try_diatonic_chords():
     root = Note.C.get_midi(4)
-    scale = Mode.aeolian.get_scale(root)
+    scale = Mode.locarian.get_scale(root)
 
     for i in range(1, 8):
         chord = scale.get_diatonic_triad(i)
@@ -27,3 +33,4 @@ def try_extention():
 if __name__ == "__main__":
     # try_extention()
     try_diatonic_chords()
+    # try_mode()

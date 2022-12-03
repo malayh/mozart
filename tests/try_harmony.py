@@ -9,7 +9,7 @@ import time
 def try_chord_generator():
 
     while True:
-        cpg = ChordProgressionGenerator(Note.E, Mode.aeolian, octave=4, lenght=6)
+        cpg = ChordProgressionGenerator(Note.E, Mode.lydian, octave=3, lenght=6)
         progression = cpg.generate()
         for chord in progression.chords:
             play_chord(chord, arpeggiate=True)
