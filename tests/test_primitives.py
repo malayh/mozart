@@ -3,7 +3,13 @@ from expects import expect, equal, have_len
 import unittest
 from unittest.mock import patch
 
-from motzart.primitives import Mode, Note, MidiNote, MAJOR_SCALE_INTERVALS
+from motzart.primitives import (
+    Mode,
+    Note,
+    MidiNote,
+    MAJOR_SCALE_INTERVALS,
+    MAJOR_SCALE_CHORD_TYPES,
+)
 
 
 class TestMidiNote(unittest.TestCase):
@@ -86,6 +92,7 @@ class TestScale(unittest.TestCase):
         expect(chord.notes[0].note).to(equal(self.scale.notes[1].note))
 
         expect(chord.notes).to(have_len(3))
+        expect(chord.chord_type).to(equal(MAJOR_SCALE_CHORD_TYPES[2 - 1]))
 
     def test_get_note_by_distance(self):
         note = self.scale.get_note_by_distance(0, 2)

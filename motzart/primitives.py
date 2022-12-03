@@ -7,6 +7,23 @@ import re
 MAJOR_SCALE_INTERVALS = [2, 2, 1, 2, 2, 2, 1]
 
 
+class ChordType(Enum):
+    major = 0
+    minor = 1
+    diminished = 2
+
+
+MAJOR_SCALE_CHORD_TYPES = [
+    ChordType.major,  # 1st - major
+    ChordType.minor,  # 2nd - minor
+    ChordType.minor,  # 3rd - minor
+    ChordType.major,  # 4th - major
+    ChordType.major,  # 5th - major
+    ChordType.minor,  # 6th - minor
+    ChordType.diminished,  # 7th - diminished
+]
+
+
 class Mode(Enum):
     ionian = 0
     dorian = 1
@@ -130,7 +147,10 @@ class Scale:
             self.get_note_by_distance(degree - 1, 2),
             self.get_note_by_distance(degree - 1, 4),
         ]
-        return Chord(notes, self, degree)
+
+        offset = self.mode.value
+        _type = MAJOR_SCALE_CHORD_TYPES[(offset + degree - 1) % 7]
+        return Chord(notes, self, degree, _type)
 
 
 @dataclass
@@ -138,6 +158,7 @@ class Chord:
     notes: list[MidiNote]
     scale: Scale
     degree: int
+    chord_type: ChordType
 
     def extend(self, degree: int, argumentation: str | None = None):
         """
