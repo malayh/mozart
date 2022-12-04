@@ -106,7 +106,6 @@ class Cadence:
 @dataclass
 class ChordProgression:
     key: Note
-    scale: Scale
     chords: list[Chord]
 
     def add_spice(self, level: int = 1):
@@ -188,4 +187,4 @@ class ChordProgressionGenerator:
             self.scale.get_diatonic_triad(random.choice(final_cadence.resolves_to))
         )
 
-        return ChordProgression(self.key, self.scale, chords)
+        return ChordProgression(self.key, chords)
