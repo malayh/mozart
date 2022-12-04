@@ -138,7 +138,7 @@ class ChordProgressionGenerator:
         return pre_final, final
 
     def spice_up(self, progession: ChordProgression) -> ChordProgression:
-        spice = ["6", "9", "11"]
+        spice = ["9", "11"]
 
         add_7th = random.random() < 0.6
         if add_7th:
@@ -197,3 +197,13 @@ class ChordProgressionGenerator:
 
         progession = ChordProgression(self.key, self.mode, chords)
         return self.spice_up(progession)
+
+    def generate_v2(self):
+        """
+        - v2 feats
+            - minimum lenght of 2
+            - renders 2 chord at a time, each pair resolves to some extent
+            - Progressions does not have to start or end at tonic
+            - Progressions can end at 5th if there is a follow up section in the code
+        """
+        pass
