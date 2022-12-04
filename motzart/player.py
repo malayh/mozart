@@ -97,7 +97,7 @@ class Player:
                 self._rendered_notes[ends_at] = [end_message]
 
     def play(self):
-        
+
         total_ticks = max(self._rendered_notes.keys()) + 1
 
         for i in range(0, total_ticks):
