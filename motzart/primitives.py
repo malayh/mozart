@@ -69,6 +69,7 @@ class Note(Enum):
 class MidiNote:
     note: Note
     octave: int = 0
+    velocity : int = 100
 
     @property
     def midi(self) -> int:
