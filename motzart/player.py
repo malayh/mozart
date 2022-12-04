@@ -7,9 +7,9 @@ from motzart.primitives import MidiNote
 
 
 @dataclass
-class PerformedNote:
+class PlayedNote:
     """
-    A Note tells you
+    A PlayedNote tells you
         - How long it is: in ticks
         - When does it start: in ticks
     """
@@ -38,7 +38,7 @@ class PerformedNote:
             raise ValueError("Midi channel has to be between 1 and 16")
 
 
-class Performer:
+class Player:
     ticks_per_beat: int = 16
     bpm: int = 80
     lenght_of_tick = -1
@@ -62,7 +62,7 @@ class Performer:
         if self.outport:
             self.outport.close()
 
-    def render(self, notes: list[PerformedNote]):
+    def render(self, notes: list[PlayedNote]):
         for note in notes:
 
             # Note start message

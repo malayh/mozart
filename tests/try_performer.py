@@ -1,6 +1,6 @@
 from __future__ import annotations
 import script_include
-from motzart.performer import Performer, PerformedNote
+from motzart.player import Player, PlayedNote
 from motzart.primitives import Note
 
 if __name__ == "__main__":
@@ -9,12 +9,12 @@ if __name__ == "__main__":
     
 
     notes = [
-        PerformedNote(note_a, 0, 1),
-        PerformedNote(note_b, 1, 2),
-        PerformedNote(note_b, 2, 3),
-        PerformedNote(note_b, 3, 4),
+        PlayedNote(note_a, 0, 1),
+        PlayedNote(note_b, 1, 2),
+        PlayedNote(note_b, 2, 3),
+        PlayedNote(note_b, 3, 4),
     ]
 
-    player = Performer(bpm=100)
+    player = Player(bpm=100)
     player.render(notes)
     player.play()
