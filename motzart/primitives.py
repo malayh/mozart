@@ -195,3 +195,20 @@ class Chord:
             self.extend(degree, argumentation=arg)
 
         return self
+
+
+@dataclass
+class TimeSignature:
+    numerator: int
+    denominator: int
+
+    def __post_init__(self):
+        if self.numerator < 1 or self.numerator > 16:
+            raise ValueError(
+                f"Invalid time signature: {self.numerator}/{self.denominator}"
+            )
+
+        if self.denominator not in (2, 4, 6, 8, 16):
+            raise ValueError(
+                f"Invalid time signature: {self.numerator}/{self.denominator}"
+            )
