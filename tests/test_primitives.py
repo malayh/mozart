@@ -57,7 +57,7 @@ class TestMidiNote(unittest.TestCase):
         expect(self.note.distance(note)).to(equal(5))
 
     def test_duplicate(self):
-        note = self.note.duplicate()
+        note = self.note.copy()
         expect(id(note)).to_not(equal(id(self.note)))
 
 

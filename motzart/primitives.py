@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 import re
+import copy
 
 MAJOR_SCALE_INTERVALS = [2, 2, 1, 2, 2, 2, 1]
 
@@ -93,8 +94,8 @@ class MidiNote:
         self.note = Note((self.note.value - semitone) % 12)
         return self
 
-    def duplicate(self) -> MidiNote:
-        return MidiNote(self.note, self.octave)
+    def copy(self) -> MidiNote:
+        return copy.deepcopy(self)
 
     def distance(self, note: MidiNote) -> int:
         """
@@ -123,7 +124,7 @@ class Scale:
 
         note = self.notes[position % 7]
         if position // 7 > 0:
-            note = note.duplicate()
+            note = note.copy()
             note.octave += position // 7
 
         return note
@@ -136,7 +137,7 @@ class Scale:
         note = self.notes[position % 7]
 
         if position // 7 > 0:
-            note = note.duplicate()
+            note = note.copy()
             note.octave += position // 7
 
         return note
@@ -168,7 +169,7 @@ class Chord:
 
         note = self.scale.get_note_by_distance(self.degree - 1, degree - 1)
         if argumentation:
-            note = note.duplicate()
+            note = note.copy()
             if argumentation == "flat":
                 note.flatten()
             else:
