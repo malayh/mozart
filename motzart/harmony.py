@@ -152,7 +152,11 @@ class ChordProgressionGenerator:
 
         return self.scale.get_diatonic_triad(degree)
 
-    def generate_v2(self, resolution_strenght: int = 5):
+    def generate_v2(
+        self,
+        start_with: ChordCategory = ChordCategory.TONIC,
+        resolution_strenght: int = 5,
+    ):
         """
         - v2 feats
             - minimum lenght of 2
@@ -169,7 +173,9 @@ class ChordProgressionGenerator:
         elif resolution_strenght == 1:
             final_cadence = Cadence.DECEPTIVE
 
-        chords: list[Chord] = [self.scale.get_diatonic_triad(1)]
+        chords: list[Chord] = [
+            self.scale.get_diatonic_triad(random.choice([*start_with.value]))
+        ]
         strenght_choices = [0, 1, 2]
 
         for i in range(1, self.lenght - 2):
