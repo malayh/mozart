@@ -1,7 +1,9 @@
 from __future__ import annotations
-import mido
-import time
+
 import random
+import time
+
+import mido
 
 from motzart.primitives import Chord, MidiNote
 

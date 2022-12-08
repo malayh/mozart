@@ -1,8 +1,8 @@
-import script_include
-
+import script_include  # noqa F401
 from dev_utils import play_chord
-from motzart.primitives import Chord, Mode, Note, MidiNote
-from motzart.harmony import ChordProgression, ChordProgressionGenerator
+
+from motzart.harmony import ChordProgressionGenerator
+from motzart.primitives import Mode, Note
 
 
 def try_generator_v2():

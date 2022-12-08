@@ -1,9 +1,10 @@
 from __future__ import annotations
+
+import random
 from dataclasses import dataclass
 from enum import Enum
-import random
 
-from motzart.primitives import ChordType, Chord, Scale, Note, Mode
+from motzart.primitives import Chord, Mode, Note, Scale
 
 
 class ChordCategory(Enum):

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
+import copy
+import re
 from dataclasses import dataclass
 from enum import Enum
-import re
-import copy
 
 MAJOR_SCALE_INTERVALS = [2, 2, 1, 2, 2, 2, 1]
 

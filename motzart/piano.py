@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from motzart.player import PlayedNote
-from motzart.primitives import Chord, TimeSignature, MidiNote
 import random
 from dataclasses import dataclass
+
+from motzart.player import PlayedNote
+from motzart.primitives import Chord, MidiNote, TimeSignature
 
 
 @dataclass
@@ -13,7 +14,7 @@ class PianoChordArticulator:
 
     def __post_init__(self):
         if self.intensity < 1 or self.intensity > 5:
-            raise ValueError(f"intensity needs to be between 1-5")
+            raise ValueError("intensity needs to be between 1-5")
 
     def intensify(self, notes: list[MidiNote]) -> list[MidiNote]:
         """

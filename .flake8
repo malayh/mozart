@@ -1,0 +1,19 @@
+[flake8]
+exclude = .git, node_modules, migrations, venv
+ignore =
+    # Ignore "Line too long (80 chars)"
+    # 80 column limit may not make sense anymore, given today's widespread availability of widescreen displays
+    W503
+    W504
+    W606
+    C812
+    C813
+    C815
+    C816
+    E203
+    E231
+    E501
+    E741
+    B007
+    B009
+    B010

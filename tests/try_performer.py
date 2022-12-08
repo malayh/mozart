@@ -1,6 +1,8 @@
 from __future__ import annotations
-import script_include
-from motzart.player import Player, PlayedNote
+
+import script_include  # noqa F401
+
+from motzart.player import PlayedNote, Player
 from motzart.primitives import Note
 
 if __name__ == "__main__":
