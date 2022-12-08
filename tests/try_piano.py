@@ -10,9 +10,7 @@ def dummy_play_progession():
     # random.seed(100)
 
     generator = ChordProgressionGenerator(Note.D, Mode.aeolian, lenght=6, octave=4)
-    progression = generator.generate_v2(
-        resolution_strenght=5, start_with=ChordCategory.TONIC
-    )
+    progression = generator.generate_v2(resolution_strenght=5, start_with=ChordCategory.TONIC)
     player = Player(bpm=120)
     art = PianoChordArticulator(time_signature=TimeSignature(8, 4), intensity=2)
 

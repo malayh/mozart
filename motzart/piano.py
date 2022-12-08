@@ -31,9 +31,7 @@ class PianoChordArticulator:
 
         return _notes
 
-    def articulate(
-        self, bar: int, chord: Chord, sloppyness: int = 0
-    ) -> list[PlayedNote]:
+    def articulate(self, bar: int, chord: Chord, sloppyness: int = 0) -> list[PlayedNote]:
         """
         Arpiggiating chord articulator
 

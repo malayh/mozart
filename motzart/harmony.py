@@ -42,9 +42,7 @@ class Cadence:
     AUTHENTIC = Resolution(5, [5], [1])
     PLAGAL = Resolution(4, [4], [1])
     HALF = Resolution(2, [1, 2, 3, 4, 5, 6, 7], [5])
-    DECEPTIVE = Resolution(
-        1, ChordCategory.DOMINENT.value, ChordCategory.SUB_DOMINENT.value
-    )
+    DECEPTIVE = Resolution(1, ChordCategory.DOMINENT.value, ChordCategory.SUB_DOMINENT.value)
 
     # Not a cadence
     SUB_TO_DOM = Resolution(
@@ -78,11 +76,7 @@ class Cadence:
 
     @staticmethod
     def resolve(chord: Chord, strength: int) -> int:
-        choices = [
-            i
-            for i in Cadence.all_cadences
-            if i.strenght == strength and chord.degree in i.starts_from
-        ]
+        choices = [i for i in Cadence.all_cadences if i.strenght == strength and chord.degree in i.starts_from]
 
         if not choices:
             return -1
@@ -92,11 +86,7 @@ class Cadence:
 
     @staticmethod
     def reverse_resolve(chord, strength: int) -> int:
-        choices = [
-            i
-            for i in Cadence.all_cadences
-            if i.strenght == strength and chord.degree in i.resolves_to
-        ]
+        choices = [i for i in Cadence.all_cadences if i.strenght == strength and chord.degree in i.resolves_to]
         if not choices:
             return -1
 
@@ -174,9 +164,7 @@ class ChordProgressionGenerator:
         elif resolution_strenght == 1:
             final_cadence = Cadence.DECEPTIVE
 
-        chords: list[Chord] = [
-            self.scale.get_diatonic_triad(random.choice([*start_with.value]))
-        ]
+        chords: list[Chord] = [self.scale.get_diatonic_triad(random.choice([*start_with.value]))]
         strenght_choices = [0, 1, 2]
 
         for i in range(1, self.lenght - 2):
@@ -187,11 +175,7 @@ class ChordProgressionGenerator:
 
             chords.append(chord)
 
-        chords.append(
-            self.scale.get_diatonic_triad(random.choice(final_cadence.starts_from))
-        )
-        chords.append(
-            self.scale.get_diatonic_triad(random.choice(final_cadence.resolves_to))
-        )
+        chords.append(self.scale.get_diatonic_triad(random.choice(final_cadence.starts_from)))
+        chords.append(self.scale.get_diatonic_triad(random.choice(final_cadence.resolves_to)))
 
         return ChordProgression(self.key, chords)

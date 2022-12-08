@@ -1,6 +1,6 @@
 import script_include  # noqa F401
-from dev_utils import play_chord
 
+from dev_utils import play_chord
 from motzart.harmony import ChordProgressionGenerator
 from motzart.primitives import Mode, Note
 

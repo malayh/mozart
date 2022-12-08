@@ -90,9 +90,7 @@ class Player:
             if ends_at + ends_at_offset >= 0:
                 ends_at = ends_at + ends_at_offset
 
-            end_message = mido.Message(
-                "note_off", note=note.note.midi, velocity=0, channel=note.midi_channel
-            )
+            end_message = mido.Message("note_off", note=note.note.midi, velocity=0, channel=note.midi_channel)
             if ends_at in self._rendered_notes:
                 self._rendered_notes[ends_at].append(end_message)
             else:

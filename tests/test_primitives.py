@@ -3,13 +3,7 @@ from unittest.mock import patch
 
 from expects import equal, expect, have_len
 
-from motzart.primitives import (
-    MAJOR_SCALE_CHORD_TYPES,
-    MAJOR_SCALE_INTERVALS,
-    MidiNote,
-    Mode,
-    Note,
-)
+from motzart.primitives import MAJOR_SCALE_CHORD_TYPES, MAJOR_SCALE_INTERVALS, MidiNote, Mode, Note
 
 
 class TestMidiNote(unittest.TestCase):

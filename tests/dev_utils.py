@@ -23,11 +23,7 @@ def play_chord(chord: Chord, arpeggiate=False):
     arp_sleep = 0
     outport = mido.open_output("pyMidiPort 1")
     for note in chord.notes:
-        outport.send(
-            mido.Message(
-                "note_on", note=note.midi, velocity=random.randint(80, 100), channel=3
-            )
-        )
+        outport.send(mido.Message("note_on", note=note.midi, velocity=random.randint(80, 100), channel=3))
 
         if arpeggiate:
             arp_sleep = random.randint(100, 200) / 1500

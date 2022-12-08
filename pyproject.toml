@@ -1,0 +1,33 @@
+[tool.black]
+line-length = 120
+exclude = '''
+(
+  /(
+    | venv
+    | migrations
+    | .git
+  )/
+)
+'''
+
+[tool.isort]
+force_to_top=["newrelic.agent","instawork.django_setup","script_include"]
+known_future_library=["__future__","pies"]
+known_standard_library=["std","std2","instawork.django_setup","sys","time","itertools","locale"]
+known_third_party=[]
+known_first_party=[]
+indent='    '
+multi_line_output=3
+forced_separate=["django.contrib","django.utils"]
+default_section="FIRSTPARTY"
+skip=["script_include.py","netsuite_import.py","netsuite_export.py"]
+skip_glob=["venv/*","*/migrations/*","node_modules/*", ".git/*"]
+atomic=true
+known_scripts=["script_include","scripts/*"]
+sections=["FUTURE","STDLIB","SCRIPTS","THIRDPARTY","FIRSTPARTY","LOCALFOLDER"]
+include_trailing_comma=true
+force_grid_wrap=0
+use_parentheses=true
+line_length=120
+old_finders=true
+float_to_top=true
