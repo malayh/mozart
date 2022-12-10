@@ -74,8 +74,7 @@ class Clip:
             _n.ends_at += ends_at
             self.played_notes.append(_n)
 
-        if clip._ends_at:
-            self._ends_at = ends_at + clip._ends_at
+        self._ends_at = ends_at + clip.ends_at
 
         return self
 

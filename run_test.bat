@@ -1,1 +1,3 @@
-python -m unittest tests\test_primitives.py
+python -m unittest ^
+    tests\test_primitives.py ^
+    tests\test_player.py
