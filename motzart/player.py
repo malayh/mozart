@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import copy
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from operator import attrgetter
 
 import mido
 
@@ -11,9 +13,7 @@ from motzart.primitives import MidiNote
 @dataclass
 class PlayedNote:
     """
-    A PlayedNote tells you
-        - How long it is: in ticks
-        - When does it start: in ticks
+    starts_at and ends_at is in beats
     """
 
     note: MidiNote
@@ -38,6 +38,46 @@ class PlayedNote:
 
         if self.midi_channel < 1 or self.midi_channel > 16:
             raise ValueError("Midi channel has to be between 1 and 16")
+
+    def copy(self) -> PlayedNote:
+        return copy.deepcopy(self)
+
+
+@dataclass
+class Clip:
+    _ends_at: int | None = None
+    played_notes: list[PlayedNote] = field(default_factory=list)
+
+    @property
+    def starts_at(self) -> int:
+        if not self.played_notes:
+            return 0
+
+        return min(self.played_notes, key=attrgetter("starts_at")).starts_at
+
+    @property
+    def ends_at(self) -> int:
+        if not self.played_notes:
+            return 0
+
+        if self._ends_at:
+            return self._ends_at
+
+        return max(self.played_notes, key=attrgetter("ends_at")).ends_at
+
+    def concat(self, clip: Clip) -> Clip:
+        ends_at = self.ends_at
+
+        for note in clip.played_notes:
+            _n = note.copy()
+            _n.starts_at += ends_at
+            _n.ends_at += ends_at
+            self.played_notes.append(_n)
+
+        if clip._ends_at:
+            self._ends_at = ends_at + clip._ends_at
+
+        return self
 
 
 class Player:
@@ -97,6 +137,9 @@ class Player:
                 self._rendered_notes[ends_at] = [end_message]
 
     def play(self):
+
+        if not self._rendered_notes:
+            return
 
         total_ticks = max(self._rendered_notes.keys()) + 1
 

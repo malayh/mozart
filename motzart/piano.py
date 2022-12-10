@@ -2,11 +2,15 @@ from __future__ import annotations
 
 import random
 
-from motzart.player import PlayedNote
+from motzart.player import Clip, PlayedNote
 from motzart.primitives import Chord, MidiNote, TimeSignature
 
 
 class PianoChordArticulator:
+    """
+    Returns 1 bar long clip of articulated chord
+    """
+
     time_signature: TimeSignature
     intensity: int
 
@@ -57,7 +61,7 @@ class PianoChordArticulator:
 
         return played_notes
 
-    def articulate_slow_arp_with_bass(self, bar: int, chord: Chord, sloppyness: int = 0) -> list[PlayedNote]:
+    def articulate_slow_arp_with_bass(self, chord: Chord, sloppyness: int = 0) -> Clip:
         """
         Arpiggiating chord articulator
 
@@ -68,14 +72,11 @@ class PianoChordArticulator:
         if len(chord.notes) < 3:
             return []
 
-        beat_offset = bar * self.time_signature.numerator
-
         # randomize velocity
         notes: list[MidiNote] = self.intensify(chord.notes)
 
         played_notes = []
         for beat in range(0, self.time_signature.numerator):
-            absolute_beat = beat + beat_offset
             slopy_offset = random.randint(0, sloppyness)
 
             # play 1 and the 5  of the chord on beat 1, with a lowerd ocatave left hand
@@ -87,17 +88,17 @@ class PianoChordArticulator:
                 played_notes.append(
                     PlayedNote(
                         note=_1,
-                        starts_at=absolute_beat,
-                        ends_at=absolute_beat + self.time_signature.numerator,
+                        starts_at=beat,
+                        ends_at=beat + self.time_signature.numerator,
                     )
                 )
 
                 played_notes.append(
                     PlayedNote(
                         note=_5,
-                        starts_at=absolute_beat,
+                        starts_at=beat,
                         starts_at_offset=slopy_offset,
-                        ends_at=absolute_beat + self.time_signature.numerator,  # notes lasts the duration of the bar
+                        ends_at=beat + self.time_signature.numerator,  # notes lasts the duration of the bar
                     )
                 )
 
@@ -105,20 +106,18 @@ class PianoChordArticulator:
                 played_notes.append(
                     PlayedNote(
                         note=notes[beat % len(notes)],
-                        starts_at=absolute_beat,
+                        starts_at=beat,
                         starts_at_offset=slopy_offset,
-                        ends_at=absolute_beat + 1,
+                        ends_at=beat + 1,
                     )
                 )
 
-        return played_notes
+        return Clip(played_notes=played_notes, _ends_at=self.time_signature.numerator)
 
-    def articulate_quick_arp(self, bar: int, chord: Chord, sloppyness: int = 0) -> list[PlayedNote]:
+    def articulate_quick_arp(self, chord: Chord, sloppyness: int = 0) -> Clip:
         # v1 cannout articulate chrods shorted than 3 notes
         if len(chord.notes) < 3:
             return []
-
-        beat_offset = bar * self.time_signature.numerator
 
         # randomize velocity
         notes: list[MidiNote] = self.intensify(chord.notes)
@@ -126,16 +125,14 @@ class PianoChordArticulator:
         # sustain 1st, and 5th scale degrees
         sustain_notes = set([0, 2])
 
-        played_notes = self.arpegiate(beat_offset, notes, sustain_notes_at=sustain_notes)
+        played_notes = self.arpegiate(0, notes, sustain_notes_at=sustain_notes)
 
-        return played_notes
+        return Clip(played_notes=played_notes, _ends_at=self.time_signature.numerator)
 
-    def articulate_arp_with_bass(self, bar: int, chord: Chord, sloppyness: int = 0) -> list[PlayedNote]:
+    def articulate_arp_with_bass(self, chord: Chord, sloppyness: int = 0) -> Clip:
         # v1 cannout articulate chrods shorted than 3 notes
         if len(chord.notes) < 3:
             return []
-
-        beat_offset = bar * self.time_signature.numerator
 
         # randomize velocity
         notes: list[MidiNote] = self.intensify(chord.notes)
@@ -152,14 +149,14 @@ class PianoChordArticulator:
                 played_notes.append(
                     PlayedNote(
                         note=_n,
-                        starts_at=beat_offset,
-                        ends_at=beat_offset + random.randint(1, 2),
+                        starts_at=0,
+                        ends_at=random.randint(1, 2),
                     )
                 )
 
                 continue
 
         remaining_notes = [note for i, note in enumerate(notes) if i not in lower_octave]
-        played_notes.extend(self.arpegiate(beat_offset + 1, remaining_notes, sustain_notes_at=sustain_notes))
+        played_notes.extend(self.arpegiate(1, remaining_notes, sustain_notes_at=sustain_notes))
 
-        return played_notes
+        return Clip(played_notes=played_notes, _ends_at=self.time_signature.numerator)
