@@ -24,8 +24,8 @@ class PlayedNote:
     ends_at: int
     # percentage by which to offset start_at.
     # -100% means start the note "one beat" earier
-    starts_at_offset: int = 0
-    ends_at_offset: int = 0
+    starts_at_offset: float = 0
+    ends_at_offset: float = 0
 
     midi_channel: int = 3
 
@@ -108,7 +108,7 @@ class Player:
 
             # Note start message
             start_at = note.starts_at * self.ticks_per_beat
-            start_at_offset = int(self.ticks_per_beat * (note.starts_at_offset / 100))
+            start_at_offset = round(self.ticks_per_beat * (note.starts_at_offset / 100))
             if start_at + start_at_offset >= 0:
                 start_at = start_at + start_at_offset
 
@@ -125,7 +125,7 @@ class Player:
 
             # note end message
             ends_at = note.ends_at * self.ticks_per_beat
-            ends_at_offset = int(self.ticks_per_beat * (note.ends_at_offset / 100))
+            ends_at_offset = round(self.ticks_per_beat * (note.ends_at_offset / 100))
             if ends_at + ends_at_offset >= 0:
                 ends_at = ends_at + ends_at_offset
 
