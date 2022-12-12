@@ -12,9 +12,9 @@ def play_notes(notes: list[MidiNote]):
     print(notes)
     outport = mido.open_output("pyMidiPort 1")
     for note in notes:
-        outport.send(mido.Message("note_on", note=note.midi, velocity=100, channel=3))
+        outport.send(mido.Message("note_on", note=note.midi, velocity=100, channel=0))
         time.sleep(1)
-        outport.send(mido.Message("note_off", note=note.midi, velocity=0, channel=3))
+        outport.send(mido.Message("note_off", note=note.midi, velocity=0, channel=0))
 
 
 def play_chord(chord: Chord, arpeggiate=False):
@@ -23,7 +23,7 @@ def play_chord(chord: Chord, arpeggiate=False):
     arp_sleep = 0
     outport = mido.open_output("pyMidiPort 1")
     for note in chord.notes:
-        outport.send(mido.Message("note_on", note=note.midi, velocity=random.randint(80, 100), channel=3))
+        outport.send(mido.Message("note_on", note=note.midi, velocity=random.randint(80, 100), channel=0))
 
         if arpeggiate:
             arp_sleep = random.randint(100, 200) / 1500
@@ -33,6 +33,6 @@ def play_chord(chord: Chord, arpeggiate=False):
     time.sleep(2)
 
     for note in chord.notes:
-        outport.send(mido.Message("note_off", note=note.midi, velocity=0, channel=3))
+        outport.send(mido.Message("note_off", note=note.midi, velocity=0, channel=0))
 
     outport.close()
