@@ -10,15 +10,15 @@ from motzart.primitives import Mode, Note, TimeSignature
 
 
 def generate_chord_progession() -> Clip:
-    generator = ChordProgressionGenerator(Note.C, Mode.lydian, lenght=4, octave=4)
+    generator = ChordProgressionGenerator(Note.E, Mode.ionian, lenght=4, octave=4)
     progression = generator.generate_v2(resolution_strenght=5, start_with=ChordCategory.TONIC)
 
     clip = Clip()
-    art = PianoChordArticulator(time_signature=TimeSignature(8, 4), intensity=4)
+    art = PianoChordArticulator(time_signature=TimeSignature(8, 4), intensity=3)
     for i in range(len(progression.chords)):
         chord = progression.chords[i]
-        chord.extend_many(["7", "9"])
-        clip.concat(art.articulate_quick_arp(chord, sloppyness=0))
+        chord.extend_many(["9", "13"])
+        clip.concat(art.articulate_arp_with_bass(chord, sloppyness=0))
 
     for n in clip.played_notes:
         n.midi_channel = 2
@@ -30,16 +30,13 @@ def try_midi_file_read():
     path = r"midi_clips\drums\fpc_affection_lofi.mid"
 
     midi_clip = parse_midfile(path)
-    # chord_clip = generate_chord_progession()
+    midi_clip.clip.round_up_to_nearest_bar(4)
 
-    clip = Clip()
-    clip.concat(midi_clip.clip)
-    clip.concat(midi_clip.clip)
+    chord_clip = generate_chord_progession()
 
     player = Player(bpm=120)
-    player.render(clip.played_notes)
-    # player.render(midi_clip.clip.played_notes)
-    # player.render(chord_clip.played_notes)
+    player.render(midi_clip.clip.played_notes)
+    player.render(chord_clip.played_notes)
 
     player.play()
 
