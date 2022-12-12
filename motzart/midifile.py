@@ -66,10 +66,10 @@ def make_played_note(note_value: int, velocity: int, starts_at: int, lenght: int
 
 def parse_midfile(filepath: str) -> MidiClip:
     """
-    
+
     Issue: If the last note of the track ends at the middle of the bar, the _ends_at won't be set to round off the bar
     """
-    
+
     mid = MidiFile(filepath)
     print(mid)
 
