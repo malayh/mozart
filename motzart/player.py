@@ -45,6 +45,11 @@ class PlayedNote:
 
 @dataclass
 class Clip:
+    """
+    Issues
+    - If ends_at is offsetted high, Clip.ends_at will not take the offset into account
+    """
+
     _ends_at: int | None = None
     played_notes: list[PlayedNote] = field(default_factory=list)
 
@@ -64,6 +69,13 @@ class Clip:
             return self._ends_at
 
         return max(self.played_notes, key=attrgetter("ends_at")).ends_at
+
+    def round_up_to_nearest_bar(self, beats_per_bar: int):
+        """
+        If the last note of the clip ends before the end of next bar, if you concat another clip to it, it would start right
+        from where the last note was. Rounding it off makes the clip to have whole number of bars
+        """
+        self._ends_at = self.ends_at + (beats_per_bar - (self.ends_at % beats_per_bar))
 
     def concat(self, clip: Clip) -> Clip:
         ends_at = self.ends_at
