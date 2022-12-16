@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import script_include  # noqa F401
 
+from motzart.midifile import parse_midfile
 from motzart.player import PlayedNote, Player
 from motzart.primitives import Note
 
-if __name__ == "__main__":
+
+def try_player():
     note_a = Note.C.get_midi(4)
     note_b = Note.C_sharp.get_midi(4)
 
@@ -19,3 +21,22 @@ if __name__ == "__main__":
     player = Player(bpm=100)
     player.render(notes)
     player.play()
+
+
+def try_clip():
+    path = r"midi_clips\drums\fpc_affection_lofi.mid"
+
+    midi_clip = parse_midfile(path)
+    midi_clip.clip.round_up_to_nearest_bar(4)
+
+    cut = midi_clip.clip.cut(0, 4)
+    for n in cut.played_notes:
+        print(n)
+
+    player = Player(bpm=120)
+    player.render(cut.played_notes)
+    player.play()
+
+
+if __name__ == "__main__":
+    try_clip()
