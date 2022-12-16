@@ -7,6 +7,7 @@ from operator import attrgetter
 
 import mido
 
+import math
 from motzart.primitives import MidiNote
 
 
@@ -41,6 +42,14 @@ class PlayedNote:
 
     def copy(self) -> PlayedNote:
         return copy.deepcopy(self)
+
+    @property
+    def effective_start(self) -> float:
+        return self.starts_at + (self.starts_at_offset / 100)
+
+    @property
+    def effective_end(self) -> float:
+        return self.ends_at + (self.ends_at_offset / 100)
 
 
 @dataclass
@@ -89,6 +98,44 @@ class Clip:
         self._ends_at = ends_at + clip.ends_at
 
         return self
+
+    def cut(self, start_beat: int, end_beat: int) -> Clip:
+        """
+        Cuts the clip from start_beat to end_beat
+        """
+        new_clip = Clip()
+
+        for note in self.played_notes:
+            # note is not in the cut
+            if note.effective_end < start_beat or note.effective_start > end_beat:
+                continue
+
+            _n = note.copy()
+
+            if _n.effective_start < start_beat:
+                _n.starts_at = 0
+                _n.starts_at_offset = 0
+            else:
+                start = _n.effective_start - start_beat
+                start_offset = (start - int(start)) * 100
+                _n.starts_at = int(start)
+                _n.starts_at_offset = start_offset
+
+            if _n.effective_end > end_beat:
+                _n.ends_at = end_beat - start_beat
+                _n.ends_at_offset = 0
+            else:
+                end = end_beat - _n.effective_end
+                end_offset = (end - int(end)) * 100
+                _n.ends_at = int(end)
+                _n.ends_at_offset = end_offset
+
+            if math.isclose(_n.effective_start, _n.effective_end, abs_tol=0.01):
+                continue
+
+            new_clip.played_notes.append(_n)
+
+        return new_clip
 
 
 class Player:
