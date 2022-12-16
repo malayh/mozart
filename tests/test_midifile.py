@@ -21,7 +21,7 @@ class TestMidiFile(unittest.TestCase):
         c = [n for n in bar_1_notes if n.note.note == Note.C][0]
         expect(c.starts_at).to(equal(0))
         expect(c.ends_at).to(equal(4))
-        expect(c.starts_at_offset).to(equal(0))
+        expect(c.starts_at_offset).to(equal(25.0))
         expect(c.ends_at_offset).to(equal(0))
         expect(c.effective_start).to(equal(0.0))
         expect(c.effective_end).to(equal(4.0))
@@ -109,3 +109,19 @@ class TestMidiFile(unittest.TestCase):
         expect(b.ends_at).to(equal(10))
         expect(b.starts_at_offset).to(equal(75.0))
         expect(math.isclose(b.ends_at_offset, 91.6, rel_tol=1e-2)).to(be_true)
+
+        a_sharp = [n for n in bar_3_notes if n.note.note == Note.A_sharp][0]
+        expect(a_sharp.starts_at).to(equal(8))
+        expect(a_sharp.ends_at).to(equal(11))
+        expect(a_sharp.starts_at_offset).to(equal(0.0))
+        expect(a_sharp.ends_at_offset).to(equal(75.0))
+        expect(a_sharp.effective_start).to(equal(8.0))
+        expect(a_sharp.effective_end).to(equal(11.75))
+
+        a = [n for n in bar_3_notes if n.note.note == Note.A][0]
+        expect(a.starts_at).to(equal(8))
+        expect(a.ends_at).to(equal(11))
+        expect(a.starts_at_offset).to(equal(0.0))
+        expect(a.ends_at_offset).to(equal(25.0))
+        expect(a.effective_start).to(equal(8.0))
+        expect(a.effective_end).to(equal(11.25))
