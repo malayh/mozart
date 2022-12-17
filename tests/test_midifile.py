@@ -21,10 +21,10 @@ class TestMidiFile(unittest.TestCase):
         c = [n for n in bar_1_notes if n.note.note == Note.C][0]
         expect(c.starts_at).to(equal(0))
         expect(c.ends_at).to(equal(4))
-        expect(c.starts_at_offset).to(equal(25.0))
-        expect(c.ends_at_offset).to(equal(0))
+        expect(c.starts_at_offset).to(equal(0.0))
+        expect(c.ends_at_offset).to(equal(25.0))
         expect(c.effective_start).to(equal(0.0))
-        expect(c.effective_end).to(equal(4.0))
+        expect(c.effective_end).to(equal(4.25))
 
         c_sharp = [n for n in bar_1_notes if n.note.note == Note.C_sharp][0]
         expect(c_sharp.starts_at).to(equal(0))

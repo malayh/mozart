@@ -84,6 +84,9 @@ class Clip:
         If the last note of the clip ends before the end of next bar, if you concat another clip to it, it would start right
         from where the last note was. Rounding it off makes the clip to have whole number of bars
         """
+        if self.ends_at % beats_per_bar == 0:
+            return
+
         self._ends_at = self.ends_at + (beats_per_bar - (self.ends_at % beats_per_bar))
 
     def concat(self, clip: Clip) -> Clip:
@@ -101,18 +104,25 @@ class Clip:
 
     def cut(self, start_beat: int, end_beat: int) -> Clip:
         """
-        Cuts the clip from start_beat to end_beat
+        Cuts the clip from start_beat to end_beat: [start_beat, end_beat)
+
+        Notes can end at ends_beat, but not start at it
         """
         new_clip = Clip()
 
         for note in self.played_notes:
-            # note is not in the cut
-            if note.effective_end < start_beat or note.effective_start > end_beat:
+
+            # note ends before the start_beat or right at it
+            if note.effective_end < start_beat or math.isclose(note.effective_end, start_beat):
+                continue
+
+            # note starts after the end_beat or right at it
+            if note.effective_start > end_beat or math.isclose(note.effective_start, end_beat):
                 continue
 
             _n = note.copy()
 
-            if _n.effective_start < start_beat:
+            if _n.effective_start < start_beat or math.isclose(_n.effective_start, start_beat):
                 _n.starts_at = 0
                 _n.starts_at_offset = 0
             else:
@@ -121,11 +131,11 @@ class Clip:
                 _n.starts_at = int(start)
                 _n.starts_at_offset = start_offset
 
-            if _n.effective_end > end_beat:
+            if _n.effective_end > end_beat or math.isclose(_n.effective_end, end_beat):
                 _n.ends_at = end_beat - start_beat
                 _n.ends_at_offset = 0
             else:
-                end = end_beat - _n.effective_end
+                end = _n.effective_end - start_beat
                 end_offset = (end - int(end)) * 100
                 _n.ends_at = int(end)
                 _n.ends_at_offset = end_offset
