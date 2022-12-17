@@ -5,7 +5,7 @@ import time
 
 import mido
 
-from motzart.primitives import Chord, MidiNote
+from mozart.primitives import Chord, MidiNote
 
 
 def play_notes(notes: list[MidiNote]):

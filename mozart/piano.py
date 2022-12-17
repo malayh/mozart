@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import random
 
-from motzart.player import Clip, PlayedNote
-from motzart.primitives import Chord, MidiNote, TimeSignature
+from mozart.player import Clip, PlayedNote
+from mozart.primitives import Chord, MidiNote, TimeSignature
 
 
 class PianoChordArticulator:

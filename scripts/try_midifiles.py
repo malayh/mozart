@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import script_include  # noqa F401
 
-from motzart.harmony import ChordProgressionGenerator
-from motzart.midifile import parse_midfile
-from motzart.piano import PianoChordArticulator
-from motzart.player import Clip, Player
-from motzart.primitives import Mode, Note, TimeSignature
+from mozart.harmony import ChordProgressionGenerator
+from mozart.midifile import parse_midfile
+from mozart.piano import PianoChordArticulator
+from mozart.player import Clip, Player
+from mozart.primitives import Mode, Note, TimeSignature
 
 
 def generate_chord_progession() -> Clip:
@@ -57,5 +57,5 @@ def try_midi_file_read():
     player.play()
 
 
-# try_midi_file_read_with_chords()
-try_midi_file_read()
+try_midi_file_read_with_chords()
+# try_midi_file_read()

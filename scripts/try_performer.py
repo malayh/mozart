@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import script_include  # noqa F401
 
-from motzart.midifile import parse_midfile
-from motzart.player import PlayedNote, Player
-from motzart.primitives import Note
+from mozart.midifile import parse_midfile
+from mozart.player import PlayedNote, Player
+from mozart.primitives import Note
 
 
 def try_player():

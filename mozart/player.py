@@ -8,7 +8,7 @@ from operator import attrgetter
 import mido
 
 import math
-from motzart.primitives import MidiNote
+from mozart.primitives import MidiNote
 
 
 @dataclass

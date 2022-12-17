@@ -3,8 +3,8 @@ import unittest
 from expects import be_true, equal, expect, have_len
 
 import math
-from motzart.midifile import parse_midfile
-from motzart.primitives import Note
+from mozart.midifile import parse_midfile
+from mozart.primitives import Note
 
 
 class TestMidiFile(unittest.TestCase):

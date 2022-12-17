@@ -1,7 +1,7 @@
 import script_include  # noqa F401
 
 from dev_utils import play_chord, play_notes
-from motzart.primitives import Mode, Note
+from mozart.primitives import Mode, Note
 
 
 def try_mode():

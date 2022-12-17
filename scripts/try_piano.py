@@ -1,9 +1,9 @@
 import script_include  # noqa F401
 
-from motzart.harmony import ChordCategory, ChordProgressionGenerator
-from motzart.piano import PianoChordArticulator
-from motzart.player import Clip, Player
-from motzart.primitives import Mode, Note, TimeSignature
+from mozart.harmony import ChordCategory, ChordProgressionGenerator
+from mozart.piano import PianoChordArticulator
+from mozart.player import Clip, Player
+from mozart.primitives import Mode, Note, TimeSignature
 
 
 def dummy_play_progession():

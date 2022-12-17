@@ -5,8 +5,8 @@ from dataclasses import dataclass
 from mido import Message, MetaMessage, MidiFile, tempo2bpm
 
 import math
-from motzart.player import Clip, PlayedNote
-from motzart.primitives import Note, TimeSignature
+from mozart.player import Clip, PlayedNote
+from mozart.primitives import Note, TimeSignature
 
 
 @dataclass

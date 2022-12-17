@@ -4,7 +4,7 @@ import random
 from dataclasses import dataclass
 from enum import Enum
 
-from motzart.primitives import Chord, Mode, Note, Scale
+from mozart.primitives import Chord, Mode, Note, Scale
 
 
 class ChordCategory(Enum):

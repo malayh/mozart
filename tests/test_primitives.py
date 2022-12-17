@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from expects import equal, expect, have_len
 
-from motzart.primitives import MAJOR_SCALE_CHORD_TYPES, MAJOR_SCALE_INTERVALS, MidiNote, Mode, Note
+from mozart.primitives import MAJOR_SCALE_CHORD_TYPES, MAJOR_SCALE_INTERVALS, MidiNote, Mode, Note
 
 
 class TestMidiNote(unittest.TestCase):
@@ -140,7 +140,7 @@ class TestChord(unittest.TestCase):
         expect(self.chord.notes[-1]).to(equal(new_note))
 
     def test_extend_many(self):
-        patcher = patch("motzart.primitives.Chord.extend")
+        patcher = patch("mozart.primitives.Chord.extend")
         mock = patcher.start()
 
         self.chord.extend_many(["7"])

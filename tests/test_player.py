@@ -2,9 +2,9 @@ import unittest
 
 from expects import equal, expect, have_len
 
-from motzart.midifile import parse_midfile
-from motzart.player import Clip, PlayedNote
-from motzart.primitives import MidiNote, Note
+from mozart.midifile import parse_midfile
+from mozart.player import Clip, PlayedNote
+from mozart.primitives import MidiNote, Note
 
 
 class TestClip(unittest.TestCase):
