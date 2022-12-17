@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from mido import Message, MetaMessage, MidiFile, tempo2bpm
+from mido import Message, MetaMessage, MidiFile, merge_tracks, tempo2bpm
 
 import math
 from mozart.player import Clip, PlayedNote
@@ -30,13 +30,11 @@ def parse_meta(mid: MidiFile) -> tuple[int, int, TimeSignature]:
     Return (bpm,clocks_per_click,TimeSignature)
     """
 
-    meta_track = mid.tracks[0]
-
     bpm = 0
     time_sig = None
     clocks_per_click = 0
 
-    for msg in meta_track:
+    for msg in merge_tracks(mid.tracks):
         if msg.type == "set_tempo":
             bpm = math.ceil(tempo2bpm(msg.tempo))
             continue
@@ -79,8 +77,10 @@ def parse_midfile(filepath: str) -> MidiClip:
     note_stack: dict[int, tuple[Message, int]] = {}
 
     total_time_passed = 0
-    for msg in mid.tracks[1]:
-        if isinstance(msg, MetaMessage):
+
+    for msg in merge_tracks(mid.tracks):
+
+        if isinstance(msg, MetaMessage) or msg.type not in ("note_on", "note_off"):
             continue
 
         total_time_passed += msg.time
@@ -91,13 +91,16 @@ def parse_midfile(filepath: str) -> MidiClip:
 
         # encountered two note_on for the same midi value, while expecting a note_off
         if msg.type == "note_on":
-            raise ValueError
+            raise ValueError("Encountered two note_on for the same midi value, while expecting a note_off")
 
         start_msg, start_at = note_stack.pop(msg.note)
         length = total_time_passed - start_at
 
         # IDK why 4, but seems like it
-        ticks_per_beat = clocks_per_click * 4
+        # ticks_per_beat = 4 * clocks_per_click
+
+        # Skipping the above calculation and hardcoding it to 96
+        ticks_per_beat = 96
 
         played_notes.append(make_played_note(start_msg.note, start_msg.velocity, start_at, length, ticks_per_beat))
 
