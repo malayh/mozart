@@ -147,6 +147,47 @@ class Clip:
 
         return new_clip
 
+    def copy(self) -> Clip:
+        return copy.deepcopy(self)
+
+
+@dataclass
+class Track:
+    midi_channel: int = 0
+    # start, clip
+    clips: dict[int, Clip] = field(default_factory=dict)
+
+    def append(self, clip: Clip):
+        last_clip_start = max(self.clips.keys(), default=0)
+        last_clip_end = self.clips[last_clip_start].ends_at + last_clip_start if last_clip_start in self.clips else 0
+        self.clips[last_clip_end] = clip
+
+    def put(self, clip: Clip, start_beat: int):
+        """
+        Puts the clip at the start_beat
+
+        Raises ValueError if the clip overlaps with another clip
+        """
+
+        for _start, _clip in self.clips.items():
+            if start_beat > _start and start_beat < _start + _clip.ends_at:
+                raise ValueError("Clip overlaps with existing clip")
+
+        self.clips[start_beat] = clip
+
+    def render(self) -> list[PlayedNote]:
+        notes: list[PlayedNote] = []
+
+        for start, clip in self.clips.items():
+            for note in clip.played_notes:
+                _n = note.copy()
+                _n.midi_channel = self.midi_channel
+                _n.starts_at += start
+                _n.ends_at += start
+                notes.append(_n)
+
+        return notes
+
 
 class Player:
     ticks_per_beat: int = 16
