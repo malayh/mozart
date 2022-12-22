@@ -271,10 +271,6 @@ class TestTrack(unittest.TestCase):
         track.put(self.clip_2, 2)
         track.append(self.clip_1)
 
-        for k, v in track.clips.items():
-            print(k, v)
-            print()
-
         played_note = track.render()
         for renderd_note, og_note in zip(played_note[len(self.clip_2.played_notes) :], self.clip_1.played_notes):
             expect(renderd_note.midi_channel).to(equal(0))
