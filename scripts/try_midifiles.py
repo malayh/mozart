@@ -24,7 +24,7 @@ def generate_chord_progession() -> Clip:
         clip.concat(art.articulate_quick_arp(chord, sloppyness=0))
 
     for n in clip.played_notes:
-        n.midi_channel = 2
+        n.midi_channel = 0
 
     return clip
 
